@@ -1,0 +1,8 @@
+:host { display: block; }
+
+/* Ocultar scrollbars en navegadores modernos */
+:host ::-webkit-scrollbar { display: none; }
+
+/* El viewport del carrusel no propaga el scroll horizontal */
+.carousel-viewport { overscroll-behavior-x: contain; touch-action: pan-y; }
+.carousel-viewport.grabbing { cursor: grabbing; }

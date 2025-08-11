@@ -1,0 +1,13 @@
+<section class="max-w-6xl mx-auto px-4 py-10">
+  <h1 class="ds-h1">Bienvenido a nuestro Restaurante</h1>
+  <p class="ds-lead mt-3">Descubre nuestros platos y disfruta una experiencia deliciosa.</p>
+  <div class="mt-6 flex gap-3">
+    <a routerLink="/menu" class="btn-primary">Ver menú</a>
+    <a routerLink="/contacto" class="btn-secondary">Contacto</a>
+  </div>
+
+  <!-- Carrusel de inspiración tipo “galería” -->
+  <div class="mt-10">
+    <app-carousel [images]="images"></app-carousel>
+  </div>
+</section>
