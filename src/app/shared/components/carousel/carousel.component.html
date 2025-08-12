@@ -1,23 +1,44 @@
-<section class="relative">
-  <!-- Viewport -->
-  <div #viewport class="carousel-viewport flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-6 px-4 md:px-0 cursor-grab" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
-    <div *ngFor="let img of images; let i = index" class="snap-start shrink-0 w-[85%] md:w-[32%]">
+<div class="carousel-container">
+  <!-- Viewport del carrusel -->
+  <div #viewport class="carousel-viewport">
+    <div *ngFor="let img of images; let i = index" 
+         class="carousel-slide"
+         [class.active]="i === current"
+         [class.prev]="i === getPrevIndex()"
+         [class.next]="i === getNextIndex()"
+         (mousedown)="i === current ? onDragStart($event) : null"
+         (mousemove)="i === current && isDragging ? onDragMove($event) : null"
+         (mouseup)="i === current ? onDragEnd($event) : null"
+         (mouseleave)="i === current ? onDragEnd($event) : null"
+         (touchstart)="i === current ? onTouchStart($event) : null"
+         (touchmove)="i === current && isDragging ? onTouchMove($event) : null"
+         (touchend)="i === current ? onTouchEnd($event) : null">
       <img [src]="img.src"
            [alt]="img.alt || 'slide ' + i"
-           class="w-full h-64 md:h-80 object-cover rounded-xl shadow-sm ring-1 ring-slate-200/60 select-none pointer-events-none"
+           class="carousel-image"
            draggable="false"
+           referrerpolicy="no-referrer"
            (error)="onImgError(i)" />
     </div>
   </div>
 
-  <!-- Controls -->
-  <div class="absolute inset-y-0 left-2 md:left-4 flex items-center">
-    <button type="button" (click)="prev()" class="btn-secondary px-3 py-2 shadow-md">‹</button>
-  </div>
-  <div class="absolute inset-y-0 right-2 md:right-4 flex items-center">
-    <button type="button" (click)="next()" class="btn-secondary px-3 py-2 shadow-md">›</button>
-  </div>
+  <!-- Controles de navegación -->
+  <button type="button" 
+          (click)="prev()" 
+          class="carousel-btn carousel-btn-prev"
+          aria-label="Imagen anterior">
+    ‹
+  </button>
+  
+  <button type="button" 
+          (click)="next()" 
+          class="carousel-btn carousel-btn-next"
+          aria-label="Siguiente imagen">
+    ›
+  </button>
 
-  <!-- Indicator -->
-  <div class="mt-4 text-center text-small text-muted">{{ current + 1 }} / {{ images.length || 0 }}</div>
-</section>
+  <!-- Indicador -->
+  <div class="carousel-indicator">
+    {{ current + 1 }} / {{ images.length }}
+  </div>
+</div>

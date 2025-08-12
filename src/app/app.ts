@@ -6,9 +6,17 @@ import { FooterComponent } from './shared/layout/footer.component';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, HeaderComponent, FooterComponent],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  template: `
+    <div class="min-h-screen">
+      <app-header></app-header>
+      <main class="w-full pt-16 md:pt-20">
+        <router-outlet />
+      </main>
+      <app-footer></app-footer>
+    </div>
+  `,
+  styles: []
 })
 export class App {
-  protected readonly title = signal('mi-app');
+  protected readonly title = signal('web-restaurante');
 }

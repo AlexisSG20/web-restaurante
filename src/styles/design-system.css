@@ -23,3 +23,18 @@
   .text-neutral { color: theme('colors.neutral'); }
   .bg-surface { background-color: theme('colors.surface'); }
 }
+
+/* Estilos específicos para restaurante */
+@layer components {
+  .restaurant-gradient {
+    background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fde68a 100%);
+  }
+  
+  .feature-card-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .feature-card-hover:hover {
+    transform: translateY(-5px);
+  }
+}
