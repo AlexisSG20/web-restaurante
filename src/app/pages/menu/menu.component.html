@@ -1,23 +1,122 @@
-<section class="max-w-6xl mx-auto px-4 py-10">
-  <h1 class="ds-h1">Menú</h1>
-  <p class="ds-lead mt-3">Explora nuestras categorías y platos.</p>
-  <div class="grid gap-6 md:grid-cols-3 mt-8">
-    <div class="card">
-      <div class="card-body">
-        <h3 class="ds-h3">Entradas</h3>
-        <p class="ds-body text-muted">Opciones para empezar.</p>
+<section class="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-r from-amber-600 to-orange-600 text-white">
+    <div class="max-w-6xl mx-auto px-4 py-16 text-center">
+      <h1 class="ds-h1 mb-4 text-white">Nuestro Menú</h1>
+      <p class="ds-lead text-amber-100">Sabores auténticos que despiertan tus sentidos</p>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <!-- Category Filter -->
+    <div class="mb-12">
+      <h2 class="ds-h2 text-center mb-8 text-gray-800">Explora Nuestras Categorías</h2>
+      <div class="flex flex-wrap justify-center gap-4">
+        <button 
+          *ngFor="let category of categories"
+          (click)="selectCategory(category.id)"
+          [class]="'category-btn ' + (selectedCategory === category.id ? 'active' : '')"
+        >
+          <span class="text-2xl mb-1">{{ category.icon }}</span>
+          <span class="font-medium">{{ category.name }}</span>
+        </button>
       </div>
     </div>
-    <div class="card">
-      <div class="card-body">
-        <h3 class="ds-h3">Platos fuertes</h3>
-        <p class="ds-body text-muted">Nuestros favoritos de la casa.</p>
+
+    <!-- Menu Items Grid -->
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div 
+        *ngFor="let item of filteredItems" 
+        class="menu-card group cursor-pointer transform transition-all duration-300 hover:scale-105"
+      >
+        <!-- Image -->
+        <div class="relative overflow-hidden rounded-t-2xl h-48 bg-gray-200">
+          <img 
+            [src]="getImagePath(item.name)" 
+            [alt]="item.name"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            loading="lazy"
+            (load)="onImageLoad($event, item)"
+            (error)="onImageError($event, item)"
+          >
+          
+          <!-- Badges -->
+          <div class="absolute top-3 left-3 flex flex-wrap gap-2">
+            <span *ngIf="item.popular" class="badge badge-popular">
+              ⭐ Popular
+            </span>
+            <span *ngIf="item.vegetarian" class="badge badge-vegetarian">
+              🌱 Vegetariano
+            </span>
+            <span *ngIf="item.spicy" class="badge badge-spicy">
+              🌶️ Picante
+            </span>
+          </div>
+
+          <!-- Price -->
+          <div class="absolute bottom-3 right-3">
+            <span class="price-tag">
+              S/ {{ item.price.toFixed(2) }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6">
+          <h3 class="ds-h3 mb-3 text-gray-800 group-hover:text-amber-600 transition-colors">
+            {{ item.name }}
+          </h3>
+          
+          <p class="ds-body text-gray-600 mb-4 line-clamp-2">
+            {{ item.description }}
+          </p>
+
+          <!-- Ingredients -->
+          <div class="mb-4">
+            <h4 class="text-sm font-semibold text-gray-700 mb-2">Ingredientes principales:</h4>
+            <div class="flex flex-wrap gap-1">
+              <span 
+                *ngFor="let ingredient of item.ingredients.slice(0, 3)" 
+                class="ingredient-tag"
+              >
+                {{ ingredient }}
+              </span>
+              <span *ngIf="item.ingredients.length > 3" class="ingredient-tag-more">
+                +{{ item.ingredients.length - 3 }} más
+              </span>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <button class="w-full btn-primary group-hover:shadow-lg transition-shadow">
+            <span class="flex items-center justify-center gap-2">
+              <span>Pedir Ahora</span>
+              <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </span>
+          </button>
+        </div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-body">
-        <h3 class="ds-h3">Postres</h3>
-        <p class="ds-body text-muted">Dulce final perfecto.</p>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredItems.length === 0" class="text-center py-12">
+      <div class="text-6xl mb-4">🍽️</div>
+      <h3 class="ds-h3 text-gray-600 mb-2">No hay platos en esta categoría</h3>
+      <p class="ds-body text-gray-500">Prueba seleccionando otra categoría</p>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="mt-16 text-center">
+      <div class="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-8 text-white">
+        <h2 class="ds-h2 mb-4">¿No encuentras lo que buscas?</h2>
+        <p class="ds-body mb-6 text-amber-100">
+          Nuestro chef está siempre dispuesto a preparar algo especial para ti
+        </p>
+        <button class="bg-white text-amber-600 px-8 py-3 rounded-full font-semibold hover:bg-amber-50 transition-colors">
+          Contactar al Chef
+        </button>
       </div>
     </div>
   </div>

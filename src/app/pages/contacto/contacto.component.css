@@ -1,0 +1,127 @@
+/* Hero Section Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.hero-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Feature Cards Hover Effects */
+.feature-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fefbf3 100%);
+  border: 1px solid rgba(245, 158, 11, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Form Input Focus Effects */
+input:focus, textarea:focus, select:focus {
+  transform: scale(1.02);
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.15);
+}
+
+/* Button Hover Effects */
+.btn-hover-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-hover-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-hover-effect:hover::before {
+  left: 100%;
+}
+
+/* Social Icons Pulse Effect */
+.social-icon {
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+
+/* Background Texture */
+.textured-bg {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(249, 115, 22, 0.1) 0%, transparent 50%);
+}
+
+/* Parallax Effect for Decorative Elements */
+@media (prefers-reduced-motion: no-preference) {
+  .parallax-slow {
+    animation: parallax-slow 20s linear infinite;
+  }
+  
+  .parallax-fast {
+    animation: parallax-fast 15s linear infinite;
+  }
+}
+
+@keyframes parallax-slow {
+  0% { transform: translateX(-50px) translateY(-50px) rotate(0deg); }
+  100% { transform: translateX(50px) translateY(50px) rotate(360deg); }
+}
+
+@keyframes parallax-fast {
+  0% { transform: translateX(30px) translateY(30px) rotate(0deg); }
+  100% { transform: translateX(-30px) translateY(-30px) rotate(-360deg); }
+}
+
+/* Responsive Improvements */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .feature-card {
+    margin-bottom: 1rem;
+  }
+  
+  .form-container {
+    padding: 1.5rem;
+  }
+}
+
+/* Loading Animation for Form Submission */
+.loading {
+  position: relative;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin: auto;
+  border: 2px solid transparent;
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg) translateY(-50%); }
+  100% { transform: rotate(360deg) translateY(-50%); }
+}
