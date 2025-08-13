@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
 
 type CarouselImage = { 
   src: string; 
@@ -10,7 +9,7 @@ type CarouselImage = {
 @Component({
   selector: 'app-carousel',
   standalone: true,
-  imports: [NgFor, NgIf],
+  imports: [],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.css',
 })
