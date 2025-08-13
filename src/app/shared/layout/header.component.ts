@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, HostListener, ElementRef } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -15,6 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private ticking = false;
   public isHeaderVisible = true;
   public currentRoute = '';
+  public isMobileMenuOpen = false;
 
   constructor(private elementRef: ElementRef, private router: Router) {}
 
@@ -34,7 +36,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Cleanup si es necesario
+    // Asegurarse de limpiar las clases del body
+    document.body.classList.remove('mobile-menu-open');
   }
 
   @HostListener('window:scroll')
@@ -45,6 +48,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.ticking = false;
       });
       this.ticking = true;
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    // Cerrar el menú móvil cuando la ventana se redimensione a desktop
+    if (this.isMobileMenuOpen && window.innerWidth >= 768) {
+      this.closeMobileMenu();
+    }
+    // Limpiar las clases del body si estamos en desktop
+    if (window.innerWidth >= 768) {
+      document.body.classList.remove('mobile-menu-open');
     }
   }
 
@@ -104,5 +119,47 @@ export class HeaderComponent implements OnInit, OnDestroy {
       top: 0,
       behavior: 'smooth'
     });
+  }
+
+  // Funciones para el menú móvil
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    console.log('Menu toggled:', this.isMobileMenuOpen); // Debug
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+    console.log('Menu closed'); // Debug
+  }
+
+  private updateBodyOverflow(): void {
+    // Solo aplicar en dispositivos móviles
+    if (window.innerWidth <= 768) {
+      if (this.isMobileMenuOpen) {
+        document.body.classList.add('mobile-menu-open');
+      } else {
+        document.body.classList.remove('mobile-menu-open');
+      }
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    if (!this.isMobileMenuOpen) return;
+    
+    const target = event.target as HTMLElement;
+    const headerElement = this.elementRef.nativeElement;
+    
+    // Cerrar el menú móvil si se hace clic fuera del header
+    if (!headerElement.contains(target)) {
+      this.closeMobileMenu();
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    if (this.isMobileMenuOpen) {
+      this.closeMobileMenu();
+    }
   }
 }

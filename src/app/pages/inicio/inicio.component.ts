@@ -6,8 +6,7 @@ import { CarouselComponent } from '../../shared/components/carousel/carousel.com
   selector: 'app-inicio',
   standalone: true,
   imports: [RouterLink, CarouselComponent],
-  templateUrl: './inicio.component.html',
-  styleUrl: './inicio.component.css',
+  templateUrl: './inicio.component.html'
 })
 export class InicioComponent {
   images = [

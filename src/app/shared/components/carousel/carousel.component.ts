@@ -1,21 +1,27 @@
-import { AfterViewInit, Component, Input } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { AfterViewInit, Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 
-type CarouselImage = { src: string; alt?: string };
+type CarouselImage = { 
+  src: string; 
+  alt?: string; 
+  loaded?: boolean;
+};
 
 @Component({
   selector: 'app-carousel',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, NgIf],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.css',
 })
-export class CarouselComponent implements AfterViewInit {
+export class CarouselComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() images: CarouselImage[] = [];
   @Input() fallbackSrc = 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1600&auto=format&fit=crop';
 
   current = 0;
   private animationInProgress = false;
+  isLoading = true;
+  private keyboardListener?: (event: KeyboardEvent) => void;
 
   // Variables para el drag
   isDragging = false;
@@ -23,19 +29,92 @@ export class CarouselComponent implements AfterViewInit {
   private currentX = 0;
   private dragThreshold = 50; // Píxeles mínimos para considerar un swipe
 
+  ngOnInit() {
+    // Resetear estado cuando se inicializa el componente
+    this.current = 0;
+    this.isLoading = true;
+    this.animationInProgress = false;
+    
+    // Inicializar el estado de carga de las imágenes
+    this.images.forEach(img => img.loaded = false);
+    this.preloadImages();
+  }
+
   ngAfterViewInit() {
     // Configurar eventos de teclado
     this.setupKeyboardEvents();
   }
 
+  ngOnDestroy() {
+    // Limpiar el event listener de teclado
+    if (this.keyboardListener) {
+      document.removeEventListener('keydown', this.keyboardListener);
+    }
+  }
+
+  private preloadImages() {
+    if (this.images.length === 0) {
+      this.isLoading = false;
+      return;
+    }
+
+    let loadedCount = 0;
+    const totalImages = this.images.length;
+
+    // Precargar la primera imagen con mayor prioridad
+    this.preloadImage(0).then(() => {
+      this.images[0].loaded = true;
+      loadedCount++;
+      
+      // Si es la única imagen o ya todas están cargadas
+      if (loadedCount === totalImages) {
+        this.isLoading = false;
+        return;
+      }
+      
+      // Mostrar el carrusel tan pronto como la primera imagen esté lista
+      this.isLoading = false;
+      
+      // Continuar cargando el resto de imágenes en segundo plano
+      for (let i = 1; i < totalImages; i++) {
+        this.preloadImage(i).then(() => {
+          this.images[i].loaded = true;
+        }).catch(() => {
+          this.images[i].src = this.fallbackSrc;
+          this.images[i].loaded = true;
+        });
+      }
+    }).catch(() => {
+      this.images[0].src = this.fallbackSrc;
+      this.images[0].loaded = true;
+      this.isLoading = false;
+    });
+  }
+
+  private preloadImage(index: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const imageElement = new Image();
+      
+      imageElement.onload = () => resolve();
+      imageElement.onerror = () => reject();
+      
+      // Configurar crossorigin y referrerpolicy para mejor compatibilidad
+      imageElement.crossOrigin = 'anonymous';
+      imageElement.referrerPolicy = 'no-referrer';
+      imageElement.src = this.images[index].src;
+    });
+  }
+
   private setupKeyboardEvents() {
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
+    this.keyboardListener = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft') {
         this.prev();
       } else if (event.key === 'ArrowRight') {
         this.next();
       }
-    });
+    };
+    
+    document.addEventListener('keydown', this.keyboardListener);
   }
 
   getPrevIndex(): number {

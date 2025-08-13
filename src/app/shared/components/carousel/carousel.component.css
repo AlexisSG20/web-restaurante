@@ -10,6 +10,62 @@
   background: #f8f9fa;
 }
 
+/* Estado de carga */
+.carousel-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6c757d;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.carousel-loading p {
+  font-size: 16px;
+  margin: 0;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* Contenedor del contenido del carrusel */
+.carousel-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% { 
+    opacity: 0; 
+    transform: translateY(10px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0);
+  }
+}
+
 /* Viewport del carrusel */
 .carousel-viewport {
   position: relative;
@@ -72,12 +128,18 @@
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
   pointer-events: none; /* Prevenir drag nativo de la imagen */
   -webkit-user-drag: none;
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
+  opacity: 0;
+}
+
+/* Imagen cargada */
+.carousel-image.loaded {
+  opacity: 1;
 }
 
 /* La imagen del slide activo hereda el cursor del padre */
@@ -148,6 +210,12 @@
 }
 
 /* Diseño responsivo */
+@media (max-width: 1200px) {
+  .carousel-container {
+    height: 550px;
+  }
+}
+
 @media (max-width: 1024px) {
   .carousel-container {
     height: 500px;
@@ -159,9 +227,9 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .carousel-container {
-    height: 400px;
+    height: 450px;
   }
   
   .carousel-slide {
@@ -170,11 +238,54 @@
   }
   
   .carousel-slide.prev {
-    transform: translateX(-50%) scale(0.85);
+    opacity: 0.5;
+    transform: translateX(-60%) scale(0.8);
   }
   
   .carousel-slide.next {
-    transform: translateX(50%) scale(0.85);
+    opacity: 0.5;
+    transform: translateX(60%) scale(0.8);
+  }
+  
+  .carousel-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+  }
+  
+  .carousel-btn-prev {
+    left: 15px;
+  }
+  
+  .carousel-btn-next {
+    right: 15px;
+  }
+  
+  .carousel-indicator {
+    bottom: 15px;
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .carousel-container {
+    height: 350px;
+  }
+  
+  .carousel-slide {
+    width: 90%;
+    height: 75%;
+  }
+  
+  .carousel-slide.prev {
+    opacity: 0.3;
+    transform: translateX(-70%) scale(0.75);
+  }
+  
+  .carousel-slide.next {
+    opacity: 0.3;
+    transform: translateX(70%) scale(0.75);
   }
   
   .carousel-btn {
@@ -189,5 +300,52 @@
   
   .carousel-btn-next {
     right: 10px;
+  }
+  
+  .carousel-indicator {
+    bottom: 12px;
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-container {
+    height: 300px;
+  }
+  
+  .carousel-slide {
+    width: 92%;
+    height: 70%;
+  }
+  
+  .carousel-slide.prev {
+    opacity: 0.2;
+    transform: translateX(-80%) scale(0.7);
+  }
+  
+  .carousel-slide.next {
+    opacity: 0.2;
+    transform: translateX(80%) scale(0.7);
+  }
+  
+  .carousel-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+  
+  .carousel-btn-prev {
+    left: 8px;
+  }
+  
+  .carousel-btn-next {
+    right: 8px;
+  }
+  
+  .carousel-indicator {
+    bottom: 10px;
+    font-size: 11px;
+    padding: 4px 8px;
   }
 }
