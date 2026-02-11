@@ -1,0 +1,40 @@
+/* Design system: tipografías, colores y utilidades semánticas */
+@layer components {
+  /* Tipografías semánticas */
+  .ds-h1 { @apply text-h1 md:text-[2.75rem] font-semibold tracking-tight; }
+  .ds-h2 { @apply text-h2 md:text-[2.125rem] font-semibold; }
+  .ds-h3 { @apply text-h3 md:text-2xl font-semibold; }
+  .ds-display { @apply text-display md:text-[4.5rem] font-bold tracking-tight; }
+  .ds-lead { @apply text-lead text-muted; }
+  .ds-body { @apply text-body text-neutral; }
+  .ds-small { @apply text-small text-muted; }
+  .ds-caption { @apply text-caption text-muted uppercase; }
+
+  /* Componentes */
+  .btn-primary { @apply inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-white shadow hover:bg-primary/90 active:bg-primary/95 transition; }
+  .btn-secondary { @apply inline-flex items-center gap-2 rounded-md bg-secondary px-4 py-2 text-white shadow hover:bg-secondary/90 active:bg-secondary/95 transition; }
+  .chip { @apply inline-flex items-center rounded-full bg-surface text-neutral border border-slate-200 px-3 py-1 text-small; }
+  .card { @apply rounded-xl bg-surface shadow-sm ring-1 ring-slate-200/60; }
+  .card-body { @apply p-4 md:p-6; }
+}
+
+@layer utilities {
+  .text-muted { color: theme('colors.muted'); }
+  .text-neutral { color: theme('colors.neutral'); }
+  .bg-surface { background-color: theme('colors.surface'); }
+}
+
+/* Estilos específicos para restaurante */
+@layer components {
+  .restaurant-gradient {
+    background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fde68a 100%);
+  }
+  
+  .feature-card-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .feature-card-hover:hover {
+    transform: translateY(-5px);
+  }
+}

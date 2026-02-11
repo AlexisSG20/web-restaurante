@@ -1,0 +1,123 @@
+<section class="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-r from-amber-600 to-orange-600 text-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 lg:py-16 text-center">
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl mb-3 sm:mb-4 text-white font-bold">Nuestro Menú</h1>
+      <p class="text-base sm:text-lg lg:text-xl text-amber-100">Sabores auténticos que despiertan tus sentidos</p>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 lg:py-12">
+    <!-- Category Filter -->
+    <div class="mb-8 sm:mb-10 lg:mb-12">
+      <h2 class="text-xl sm:text-2xl lg:text-3xl text-center mb-6 sm:mb-8 text-gray-800 font-bold">Explora Nuestras Categorías</h2>
+      <div class="flex flex-wrap justify-center gap-2 sm:gap-3 lg:gap-4 max-w-4xl mx-auto">
+        <button 
+          *ngFor="let category of categories"
+          (click)="selectCategory(category.id)"
+          [class]="'category-btn ' + (selectedCategory === category.id ? 'active' : '')"
+        >
+          <span class="text-lg sm:text-xl lg:text-2xl mb-1 block">{{ category.icon }}</span>
+          <span class="text-xs sm:text-sm lg:text-base font-medium leading-tight">{{ category.name }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menu Items Grid -->
+    <div class="grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+      <div 
+        *ngFor="let item of filteredItems" 
+        class="menu-card group cursor-pointer transform transition-all duration-300 hover:scale-105"
+      >
+        <!-- Image -->
+        <div class="relative overflow-hidden rounded-t-2xl h-40 sm:h-48 lg:h-52 bg-gray-200">
+          <img 
+            [src]="getImagePath(item.name)" 
+            [alt]="item.name"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            loading="lazy"
+            (load)="onImageLoad($event, item)"
+            (error)="onImageError($event, item)"
+          >
+          
+          <!-- Badges -->
+          <div class="absolute top-2 sm:top-3 left-2 sm:left-3 flex flex-wrap gap-1 sm:gap-2">
+            <span *ngIf="item.popular" class="badge badge-popular text-xs sm:text-sm">
+              ⭐ Popular
+            </span>
+            <span *ngIf="item.vegetarian" class="badge badge-vegetarian text-xs sm:text-sm">
+              🌱 Vegetariano
+            </span>
+            <span *ngIf="item.spicy" class="badge badge-spicy text-xs sm:text-sm">
+              🌶️ Picante
+            </span>
+          </div>
+
+          <!-- Price -->
+          <div class="absolute bottom-2 sm:bottom-3 right-2 sm:right-3">
+            <span class="price-tag text-sm sm:text-base">
+              S/ {{ item.price.toFixed(2) }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-4 sm:p-6">
+          <h3 class="text-lg sm:text-xl lg:text-2xl mb-2 sm:mb-3 text-gray-800 group-hover:text-amber-600 transition-colors font-semibold">
+            {{ item.name }}
+          </h3>
+          
+          <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-2 leading-relaxed">
+            {{ item.description }}
+          </p>
+
+          <!-- Ingredients -->
+          <div class="mb-3 sm:mb-4">
+            <h4 class="text-xs sm:text-sm font-semibold text-gray-700 mb-2">Ingredientes principales:</h4>
+            <div class="flex flex-wrap gap-1">
+              <span 
+                *ngFor="let ingredient of item.ingredients.slice(0, 3)" 
+                class="ingredient-tag text-xs sm:text-sm"
+              >
+                {{ ingredient }}
+              </span>
+              <span *ngIf="item.ingredients.length > 3" class="ingredient-tag-more text-xs sm:text-sm">
+                +{{ item.ingredients.length - 3 }} más
+              </span>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <button class="w-full btn-primary group-hover:shadow-lg transition-shadow text-sm sm:text-base py-2 sm:py-3">
+            <span class="flex items-center justify-center gap-2">
+              <span>Pedir Ahora</span>
+              <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredItems.length === 0" class="text-center py-8 sm:py-12">
+      <div class="text-4xl sm:text-6xl mb-3 sm:mb-4">🍽️</div>
+      <h3 class="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-2 font-semibold">No hay platos en esta categoría</h3>
+      <p class="text-sm sm:text-base text-gray-500">Prueba seleccionando otra categoría</p>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="mt-12 sm:mt-16 text-center">
+      <div class="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-6 sm:p-8 text-white">
+        <h2 class="text-xl sm:text-2xl lg:text-3xl mb-3 sm:mb-4 font-bold">¿No encuentras lo que buscas?</h2>
+        <p class="text-sm sm:text-base lg:text-lg mb-4 sm:mb-6 text-amber-100 leading-relaxed">
+          Nuestro chef está siempre dispuesto a preparar algo especial para ti
+        </p>
+        <button class="bg-white text-amber-600 px-6 sm:px-8 py-2 sm:py-3 rounded-full font-semibold hover:bg-amber-50 transition-colors text-sm sm:text-base">
+          Contactar al Chef
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

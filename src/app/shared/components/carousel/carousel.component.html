@@ -1,0 +1,59 @@
+<div class="carousel-container">
+  <!-- Loading state -->
+  @if (isLoading) {
+    <div class="carousel-loading">
+      <div class="loading-spinner"></div>
+      <p>Cargando imágenes...</p>
+    </div>
+  }
+
+  <!-- Carousel content -->
+  @if (!isLoading) {
+    <div class="carousel-content">
+      <!-- Viewport del carrusel -->
+      <div #viewport class="carousel-viewport">
+        @for (img of images; track img.src; let i = $index) {
+          <div class="carousel-slide"
+               [class.active]="i === current"
+               [class.prev]="i === getPrevIndex()"
+               [class.next]="i === getNextIndex()"
+               (mousedown)="i === current ? onDragStart($event) : null"
+               (mousemove)="i === current && isDragging ? onDragMove($event) : null"
+               (mouseup)="i === current ? onDragEnd($event) : null"
+               (mouseleave)="i === current ? onDragEnd($event) : null"
+               (touchstart)="i === current ? onTouchStart($event) : null"
+               (touchmove)="i === current && isDragging ? onTouchMove($event) : null"
+               (touchend)="i === current ? onTouchEnd($event) : null">
+            <img [src]="img.src"
+                 [alt]="img.alt || 'slide ' + i"
+                 class="carousel-image"
+                 [class.loaded]="img.loaded"
+                 draggable="false"
+                 referrerpolicy="no-referrer"
+                 (error)="onImgError(i)" />
+          </div>
+        }
+      </div>
+
+      <!-- Controles de navegación -->
+      <button type="button" 
+              (click)="prev()" 
+              class="carousel-btn carousel-btn-prev"
+              aria-label="Imagen anterior">
+        ‹
+      </button>
+      
+      <button type="button" 
+              (click)="next()" 
+              class="carousel-btn carousel-btn-next"
+              aria-label="Siguiente imagen">
+        ›
+      </button>
+
+      <!-- Indicador -->
+      <div class="carousel-indicator">
+        {{ current + 1 }} / {{ images.length }}
+      </div>
+    </div>
+  }
+</div>
